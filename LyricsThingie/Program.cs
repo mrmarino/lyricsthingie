@@ -50,20 +50,13 @@ namespace LyricsThingie {
                     }
                     Console.Write("Não foi encontrada letra.\r\n");
                 }
-                catch (ArgumentException) {
+                catch (Exception) {
                     if (write != null) {
                         write.WriteLine("{0} | {1} - {2}", fileName, file.Tag.FirstAlbumArtist, file.Tag.Title);
                         write.Flush();
                     }
                     Console.Write("Houve um problema ao obter a letra, tente novamente mais tarde.\r\n");
                     
-                }
-                catch (WebException) {
-                    if (write != null) {
-                        write.WriteLine("{0} | {1} - {2}", fileName, file.Tag.FirstAlbumArtist, file.Tag.Title);
-                        write.Flush();
-                    }
-                    Console.Write("Houve um problema ao obter a letra, tente novamente mais tarde.\r\n");
                 }
             }
 
