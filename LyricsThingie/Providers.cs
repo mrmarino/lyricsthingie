@@ -52,6 +52,9 @@ namespace LyricsThingie {
             //Remover qualquer tag html presente
             rep = Regex.Replace(rep, "<[^>]+>", "");
 
+            //Verificar se o site tem a letra completa, senão deixa em branco mesmo que é melhor e podemos procurar em outros
+            if (Regex.IsMatch(rep, "Unfortunately, we are not licensed to display the full lyrics for this song at the moment")) return string.Empty;
+
             return rep;
         }
 
@@ -77,7 +80,7 @@ namespace LyricsThingie {
                 artist = artist.Replace('&', 'e');
                 title = title.Replace('&', 'e');
 
-                doc = web.Load(string.Format("http://letras.mus.br/winamp.php?t={0}-{1}", HttpUtility.UrlEncode(artist, ISOEncoding), HttpUtility.UrlEncode(artist, ISOEncoding)));
+                doc = web.Load(string.Format("http://letras.mus.br/winamp.php?t={0}-{1}", HttpUtility.UrlEncode(artist, ISOEncoding), HttpUtility.UrlEncode(title, ISOEncoding)));
                 node = doc.DocumentNode.SelectSingleNode("//div[@id='letra']/p");
 
                 if (node != null) {
