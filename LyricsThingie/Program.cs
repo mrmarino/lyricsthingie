@@ -32,11 +32,16 @@ namespace LyricsThingie {
 
                 Console.Write("Procurando letra para {0} - {1}... ", file.Tag.FirstAlbumArtist, file.Tag.Title);
 
+                if (!string.IsNullOrEmpty(file.Tag.Lyrics) && file.Tag.Lyrics.Contains("Unfortunately, we are not licensed to display")) {
+                    file.Tag.Lyrics = "";
+                    Console.Write("Removendo tag incompleta.");
+                    file.Save();
+                }
+
                 try {
                     if (string.IsNullOrEmpty(file.Tag.Lyrics) || forceDownload) {
                         file.Tag.Lyrics = GetLyricsForSong(file.Tag.FirstAlbumArtist, file.Tag.Title);
                         file.Save();
-
                         Console.Write("OK.\r\n");
                     }
                     else {
