@@ -70,23 +70,16 @@ namespace LyricsThingie {
             HtmlNode node = doc.DocumentNode.SelectSingleNode("//div[@id='letra']/p");
 
             //Se encontrar a letra, retorna
-            if (node != null) {
-                rep = WebUtility.HtmlDecode(node.InnerText);
-                return rep;
-            }
-
-            //Se não encontrar, vamos trocar os "&" por "e" e ver se encontramos
-            if (artist.Contains("&") || title.Contains("&")) {
+            if (node == null && (artist.Contains("&") || title.Contains("&"))) {
                 artist = artist.Replace('&', 'e');
                 title = title.Replace('&', 'e');
 
-                doc = web.Load(string.Format("http://letras.mus.br/winamp.php?t={0}-{1}", HttpUtility.UrlEncode(artist, ISOEncoding), HttpUtility.UrlEncode(title, ISOEncoding)));
-                node = doc.DocumentNode.SelectSingleNode("//div[@id='letra']/p");
-
-                if (node != null) {
-                    rep = WebUtility.HtmlDecode(node.InnerText);
-                }
+                return GetFromTerra(artist, title);
             }
+
+            node.InnerHtml = node.InnerHtml.Replace("<br>", "\r\n");
+
+            rep = WebUtility.HtmlDecode(node.InnerText);
 
             return rep;
         }
