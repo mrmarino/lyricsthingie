@@ -40,6 +40,11 @@ namespace LyricsThingie {
 
             if (node == null) return string.Empty;
 
+            foreach (HtmlNode comment in node.SelectNodes("//comment()"))
+            {
+                comment.ParentNode.RemoveChild(comment);
+            }
+
             //Remover elementos desnecessários
             node.FirstChild.Remove();
             node.LastChild.Remove();

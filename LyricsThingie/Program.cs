@@ -17,8 +17,8 @@ namespace LyricsThingie
     {
         static void Main(string[] args)
         {
-            //string directory = args[0];
-            string directory = "D:\\Musicas Variadas";
+            string directory = args[0];
+            //string directory = "C:\\Users\\Administrator\\Downloads\\song";
             StreamWriter write = null;
 
             if (args.Length >= 2)
@@ -36,7 +36,7 @@ namespace LyricsThingie
             {
                 TagLib.File file = TagLib.File.Create(fileName);
 
-                if (!string.IsNullOrEmpty(file.Tag.Lyrics) && file.Tag.Lyrics.Contains("Unfortunately, we are not licensed to display"))
+                if (!string.IsNullOrEmpty(file.Tag.Lyrics) && (file.Tag.Lyrics.Contains("Unfortunately, we are not licensed to display") || file.Tag.Lyrics.Contains("NewPP limit report")))
                 {
                     file.Tag.Lyrics = "";
                 }
@@ -46,29 +46,28 @@ namespace LyricsThingie
                 try
                 {
                     {
-                        file.Tag.Lyrics = GetLyricsForSong(file.Tag.FirstAlbumArtist, file.Tag.Title);
+                        file.Tag.Lyrics = GetLyricsForSong(file.Tag.FirstPerformer, file.Tag.Title);
                         file.Save();
-                        Console.Write("Procurando letra para {0} - {1}... OK\r\n", file.Tag.FirstAlbumArtist, file.Tag.Title);
+                        Console.Write("Procurando letra para {0} - {1}... OK\r\n", file.Tag.FirstPerformer, file.Tag.Title);
                     }
                 }
                 catch (KeyNotFoundException)
                 {
                     if (write != null)
                     {
-                        write.WriteLine("{0} | {1} - {2}", fileName, file.Tag.FirstAlbumArtist, file.Tag.Title);
+                        write.WriteLine("{0} | {1} - {2}", fileName, file.Tag.FirstPerformer, file.Tag.Title);
                         write.Flush();
                     }
-                    Console.Write("Procurando letra para {0} - {1}... Não foi encontrada letra.\r\n", file.Tag.FirstAlbumArtist, file.Tag.Title);
+                    Console.Write("Procurando letra para {0} - {1}... Não foi encontrada letra.\r\n", file.Tag.FirstPerformer, file.Tag.Title);
                 }
                 catch (Exception)
                 {
                     if (write != null)
                     {
-                        write.WriteLine("{0} | {1} - {2}", fileName, file.Tag.FirstAlbumArtist, file.Tag.Title);
+                        write.WriteLine("{0} | {1} - {2}", fileName, file.Tag.FirstPerformer, file.Tag.Title);
                         write.Flush();
                     }
-                    Console.Write("Procurando letra para {0} - {1}... Houve um problema ao obter a letra, tente novamente.\r\n", file.Tag.FirstAlbumArtist, file.Tag.Title);
-
+                    Console.Write("Procurando letra para {0} - {1}... Houve um problema ao obter a letra, tente novamente.\r\n", file.Tag.FirstPerformer, file.Tag.Title);
                 }
             });
 
